@@ -1,7 +1,7 @@
 <template>
   <el-form-item :label="widget.name" :prop="widget.model">
     <template v-if="widget.type == 'input'" >
-      <el-input 
+      <el-input
         v-if="widget.options.dataType == 'number' || widget.options.dataType == 'integer' || widget.options.dataType == 'float'"
         type="number"
         v-model.number="dataModel"
@@ -9,7 +9,7 @@
         :style="{width: widget.options.width}"
         :disabled="widget.options.disabled"
       ></el-input>
-      <el-input 
+      <el-input
         v-else
         :type="widget.options.dataType"
         v-model="dataModel"
@@ -29,8 +29,8 @@
     </template>
 
     <template v-if="widget.type == 'number'">
-      <el-input-number 
-        v-model="dataModel" 
+      <el-input-number
+        v-model="dataModel"
         :style="{width: widget.options.width}"
         :step="widget.options.step"
         controls-position="right"
@@ -59,7 +59,7 @@
         :disabled="widget.options.disabled"
       >
         <el-checkbox
-          
+
           :style="{display: widget.options.inline ? 'inline-block' : 'block'}"
           :label="item.value" v-for="(item, index) in (widget.options.remote ? widget.options.remoteOptions : widget.options.options)" :key="index"
         >
@@ -70,7 +70,7 @@
     </template>
 
     <template v-if="widget.type == 'time'">
-      <el-time-picker 
+      <el-time-picker
         v-model="dataModel"
         :is-range="widget.options.isRange"
         :placeholder="widget.options.placeholder"
@@ -101,6 +101,7 @@
         :value-format="widget.options.timestamp ? 'timestamp' : widget.options.format"
         :format="widget.options.format"
         :style="{width: widget.options.width}"
+        :picker-options="dateOptions"
       >
       </el-date-picker>
     </template>
@@ -114,7 +115,7 @@
     </template>
 
     <template v-if="widget.type == 'color'">
-      <el-color-picker 
+      <el-color-picker
         v-model="dataModel"
         :disabled="widget.options.disabled"
         :show-alpha="widget.options.showAlpha"
@@ -139,12 +140,14 @@
       <el-switch
         v-model="dataModel"
         :disabled="widget.options.disabled"
+        active-value="是"
+        inactive-value="否"
       >
       </el-switch>
     </template>
 
     <template v-if="widget.type=='slider'">
-      <el-slider 
+      <el-slider
         v-model="dataModel"
         :min="widget.options.min"
         :max="widget.options.max"
@@ -213,7 +216,12 @@ export default {
   },
   data () {
     return {
-      dataModel: this.models[this.widget.model]
+      dataModel: this.models[this.widget.model],
+      dateOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now();
+        }
+      },
     }
   },
   created () {
